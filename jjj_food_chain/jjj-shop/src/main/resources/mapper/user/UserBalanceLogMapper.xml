@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.jjjshop.shop.mapper.user.UserBalanceLogMapper">
+
+    <select id="getList" parameterType="net.jjjshop.shop.param.user.UserBalanceLogPageParam" resultType="net.jjjshop.shop.vo.user.UserBalanceLogVo">
+        SELECT log.*,user.nick_name,user.avatar_url
+        <include refid="commonSql" />
+        ORDER BY log.create_time DESC
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getTotalCount" parameterType="net.jjjshop.shop.param.user.UserBalanceLogPageParam" resultType="java.lang.Long">
+        SELECT count(*)
+        <include refid="commonSql" />
+    </select>
+
+    <!-- 通用查询 -->
+    <sql id="commonSql">
+        FROM ${prefix}user_balance_log log
+        LEFT JOIN ${prefix}user user ON user.user_id = log.user_id
+        <where>
+            <if test="nickName != null and nickName != ''">
+                AND user.nick_name LIKE CONCAT('%',#{nickName},'%')
+            </if>
+            <if test=" scene != null and scene != 0">
+                AND log.scene = #{scene}
+            </if>
+            <if test="startDate!= null" >
+                AND log.create_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null" >
+                AND log.create_time &lt;= #{endDate}
+            </if>
+        </where>
+    </sql>
+</mapper>

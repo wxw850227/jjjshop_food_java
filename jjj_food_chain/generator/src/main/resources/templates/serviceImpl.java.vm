@@ -1,0 +1,41 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+#if(${cfg.generatorPageParam})
+import ${cfg.pageParamClass};
+#end
+#if(${cfg.generatorQueryVo})
+import ${cfg.queryVoClass};
+#end
+#if(${cfg.generatorStrategy} == 'SINGLE')
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+#end
+import ${superServiceImplClassPackage};
+#if(${cfg.generatorStrategy} != 'SIMPLE')
+import ${cfg.pagingClass};
+import ${cfg.pageInfoClass};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.transaction.annotation.Transactional;
+#end
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Slf4j
+@Service
+public class ${table.serviceImplName} extends BaseServiceImpl<${table.mapperName}, ${entity}> implements ${entity}Service {
+
+    @Autowired
+    private ${table.mapperName} ${cfg.mapperObjectName};
+
+}

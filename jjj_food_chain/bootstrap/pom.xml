@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.jjjshop</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>bootstrap</artifactId>
+    <name>bootstrap</name>
+    <description>项目启动模块</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${spring-boot-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.jjjshop</groupId>
+            <artifactId>jjj-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.jjjshop</groupId>
+            <artifactId>jjj-admin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.jjjshop</groupId>
+            <artifactId>jjj-shop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.jjjshop</groupId>
+            <artifactId>jjj-front</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.jjjshop</groupId>
+            <artifactId>jjj-job</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

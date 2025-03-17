@@ -1,0 +1,48 @@
+server:
+  port: 8891
+
+spring-boot-jjj:
+  # 是否启用ansi控制台输出有颜色的字体，dev环境建议开启，服务器环境设置为false
+  enable-ansi: false
+  # 当前环境服务IP地址/域名
+  server-ip: http://127.0.0.1:8891
+  # 文件上传下载配置
+  upload-path: /www/wwwroot/jjjfood_chain.com/uploads
+  # AOP配置
+  aop:
+    # Aop日志配置
+    log:
+      # NONE：不打印日志
+      # ORDER：请求和响应日志，按照执行顺序分开打印
+      # LINE：方法执行结束时，连续分开打印请求和响应日志
+      # MERGE：方法执行结束时，合并请求和响应日志，同时打印
+      log-print-type: NONE
+
+# logback.xml中有详细的日志配置
+logging:
+  path: /www/wwwroot/jjjfood_chain.com/logs
+################################ spring config end #################################
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jjj_food_chain?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  # Redis配置
+  redis:
+    database: 0
+    host: localhost
+    password: 123456
+    port: 6379
+
+# 打印SQL语句和结果集，本地开发环境可开启，线上注释掉
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+netty:
+  #netty端口
+  port: 2348
+  #netty主线程数，一般1-2个
+  bossThread: 1

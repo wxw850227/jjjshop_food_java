@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.jjjshop.shop.mapper.statistics.ProductRankingMapper">
+
+    <select id="getSaleRanking" resultType="net.jjjshop.shop.vo.statistics.ProductSaleRankingVo">
+        SELECT op.product_id,op.product_name,SUM(op.total_num) AS total_num
+        FROM ${prefix}order_product AS op
+                 LEFT JOIN ${prefix}order o
+                           ON o.order_id=op.order_id
+        WHERE o.pay_status = 20 AND o.order_status != 20
+        GROUP BY op.product_id,op.product_name
+        HAVING total_num>0
+        ORDER BY total_num desc
+            LIMIT 0,10
+    </select>
+
+    <select id="getSaleNumRank" resultType="net.jjjshop.shop.vo.statistics.ProductSaleRankingVo">
+        SELECT op.product_id,op.product_name,IFNULL(SUM(op.total_num),0) AS total_num
+        ,IFNULL(sum(op.total_pay_price),0.0) as total_price
+        FROM ${prefix}order_product AS op
+        LEFT JOIN ${prefix}order o
+        ON o.order_id=op.order_id
+        LEFT JOIN ${prefix}product p
+        ON p.product_id = op.product_id
+        WHERE o.pay_status = 20 AND o.order_status != 20
+        <if test="productType != null and productType != 0">
+            AND p.product_type = #{productType}
+        </if>
+        <if test="shopSupplierId != null and shopSupplierId != 0">
+            AND p.shop_supplier_id = #{shopSupplierId}
+        </if>
+        <if test="productTime != null and productTime == 1" >
+            AND date(o.create_time) = CURDATE()
+        </if>
+        <if test="productTime != null and productTime == 2" >
+            AND date(o.create_time) BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+        </if>
+        <if test="productTime != null and  productTime == 3" >
+            AND date_format(o.create_time,'%Y%m') = date_format(CURDATE(),'%Y%m')
+        </if>
+        <if test="productTime != null and  productTime == 4" >
+            AND YEAR(o.create_time)  = YEAR(now())
+        </if>
+        GROUP BY op.product_id,op.product_name
+        HAVING total_num>0
+        ORDER BY total_num desc
+        LIMIT 0,10
+    </select>
+
+    <select id="getSaleMoneyRank" resultType="net.jjjshop.shop.vo.statistics.ProductSaleRankingVo">
+        SELECT op.product_id,op.product_name,IFNULL(SUM(op.total_num),0.0) AS total_num
+        ,IFNULL(sum(op.total_pay_price),0.0) as total_price
+        FROM ${prefix}order_product AS op
+        LEFT JOIN ${prefix}order o
+        ON o.order_id=op.order_id
+        LEFT JOIN ${prefix}product p
+        ON p.product_id = op.product_id
+        WHERE o.pay_status = 20 AND o.order_status != 20
+        <if test="productType != null and productType != 0">
+            AND p.product_type = #{productType}
+        </if>
+        <if test="shopSupplierId != null and shopSupplierId != 0">
+            AND p.shop_supplier_id = #{shopSupplierId}
+        </if>
+        <if test="productSaleTime != null and productSaleTime == 1" >
+            AND date(o.create_time) = CURDATE()
+        </if>
+        <if test="productSaleTime != null and productSaleTime == 2" >
+            AND date(o.create_time) BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+        </if>
+        <if test="productSaleTime != null and  productSaleTime == 3" >
+            AND date_format(o.create_time,'%Y%m') = date_format(CURDATE(),'%Y%m')
+        </if>
+        <if test="productSaleTime != null and  productSaleTime == 4" >
+            AND YEAR(o.create_time)  = YEAR(now())
+        </if>
+        GROUP BY op.product_id,op.product_name
+        HAVING total_price>0
+        ORDER BY total_price desc
+        LIMIT 0,10
+    </select>
+
+    <select id="getDataDetail" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT IFNULL(SUM(o.express_price),0.0) AS expressPrice
+             ,IFNULL(sum(bag_price),0.0) as bagPrice
+             ,IFNULL(sum(total_price),0.0)  as productPrice
+             ,IFNULL(sum(refund_money),0.0) as refundMoney
+             ,IFNULL(sum(pay_price),0.0) as totalPrice
+             ,count(o.order_id) as orderCount
+        FROM ${prefix}order o
+        WHERE o.pay_status = 20 AND o.order_status != 20 AND o.is_delete = 0
+				AND o.order_type = #{orderType} AND o.shop_supplier_id = #{shopSupplierId}
+    </select>
+</mapper>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证码</title>
+</head>
+<body>
+
+<div>
+    <p>方式一：获取图片</p>
+    <img id="imageCode" src="http://localhost:8888/verificationCode/getImage" alt="" onclick="changeImage()">
+    <p>verifyToken：查看Responses Headers</p>
+</div>
+
+<hr>
+
+<div>
+    <p>方式二：获取base64图片编码</p>
+    <img src="" alt="" id="base64ImageCode" onclick="changeBase64Image()">
+    <p id="verifyToken"></p>
+</div>
+
+<script type="text/javascript">
+    function changeImage() {
+        document.getElementById('imageCode').src = "http://localhost:8888/api/verificationCode/getImage?time=" + new Date().getTime();
+    }
+
+    var url = "http://localhost:8888/api/verificationCode/getBase64Image";
+
+    function changeBase64Image() {
+        var  xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var result = JSON.parse(xhr.responseText);
+                document.getElementById('base64ImageCode').src = result.data.image;
+                document.getElementById('verifyToken').innerText = "verifyToken：" + result.data.verifyToken;
+            }
+        };
+        xhr.open("GET", url, true);
+        xhr.send(null);
+    }
+
+    changeBase64Image();
+
+</script>
+
+</body>
+</html>

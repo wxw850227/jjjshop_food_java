@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.jjjshop.front.mapper.user.UserCartMapper">
+    <select id="getAll" parameterType="java.lang.Integer" resultType="net.jjjshop.front.vo.product.ProductUserCartVo">
+        SELECT cart.*
+        FROM ${prefix}cart AS cart
+                 LEFT JOIN ${prefix}product product
+                           ON cart.product_id = product.product_id
+                 LEFT JOIN ${prefix}product_sku sku
+                           ON cart.product_id = sku.product_id and cart.product_sku_id = sku.product_sku_id
+        WHERE cart.user_id = #{userId} and product.is_delete = 0 and product.product_status = 10
+        ORDER BY cart.create_time desc
+    </select>
+
+    <select id="getList" resultType="net.jjjshop.front.vo.product.ProductUserCartVo">
+        SELECT cart.*
+        FROM ${prefix}cart AS cart
+                 LEFT JOIN ${prefix}product product
+                           ON cart.product_id = product.product_id
+                 LEFT JOIN ${prefix}product_sku sku
+                           ON cart.product_id = sku.product_id and cart.product_sku_id = sku.product_sku_id
+        WHERE cart.user_id = #{userId} and product.is_delete = 0 and product.product_status = 10
+          and cart.shop_supplier_id = #{shopSupplierId} and cart.cart_type = #{cartType}
+        ORDER BY cart.create_time desc
+    </select>
+
+    <select id="getCartInfo" resultType="net.jjjshop.front.vo.product.UserCartVo">
+        SELECT IFNULL(SUM(cart.bag_price * cart.product_num),0) AS totalBagPrice,IFNULL(SUM(cart.price * cart.product_num),0) AS totalProductPrice,
+               IFNULL(SUM(cart.product_price * cart.product_num),0) AS totalLineMoney,IFNULL(SUM(cart.product_num),0) AS cartTotalNum
+        FROM ${prefix}cart AS cart
+                 LEFT JOIN ${prefix}product product
+                           ON cart.product_id = product.product_id
+                 LEFT JOIN ${prefix}product_sku sku
+                           ON cart.product_id = sku.product_id and cart.product_sku_id = sku.product_sku_id
+        WHERE cart.user_id = #{userId} and product.is_delete = 0 and product.product_status = 10
+          and cart.shop_supplier_id = #{shopSupplierId} and cart.cart_type = #{cartType}
+        ORDER BY cart.create_time desc
+    </select>
+
+
+    <select id="getCartList" resultType="net.jjjshop.front.vo.product.ProductBuyVo">
+        SELECT cart.bag_price * cart.product_num AS totalBagPrice,
+        cart.price * cart.product_num AS totalProductPrice,
+        cart.product_price * cart.product_num AS totalLineMoney,
+        product.is_enable_grade AS isEnableGrade,
+        product.is_points_gift AS isPointsGift,
+        cart.*,product.*
+        FROM ${prefix}cart AS cart
+        LEFT JOIN ${prefix}product product
+        ON cart.product_id = product.product_id
+        WHERE cart.user_id = #{userId} and product.is_delete = 0 and product.product_status = 10
+        and cart.shop_supplier_id = #{shopSupplierId}
+        and cart.cart_id IN (
+        <foreach collection="cartIdList" item="cartId" separator=",">
+            #{cartId}
+        </foreach>
+        )
+        ORDER BY cart.create_time desc
+    </select>
+
+    <select id="getCartNum" resultType="java.lang.Integer">
+        SELECT IFNULL(SUM(cart.product_num),0) AS cartNum
+        FROM ${prefix}cart AS cart
+                 LEFT JOIN ${prefix}product product
+                           ON cart.product_id = product.product_id
+        WHERE cart.user_id = #{userId} and product.is_delete = 0 and product.product_status = 10
+          and cart.cart_type = #{type}
+          AND product.product_id = #{productId}
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.jjjshop.common.mapper.order.OrderProductMapper">
+
+    <select id="getProductData" resultType="net.jjjshop.common.vo.order.OrderProductVo">
+        SELECT op.*, o.create_time
+        FROM ${prefix}order_product op
+        LEFT JOIN ${prefix}order o
+        ON o.order_id = op.order_id
+        <where>
+            <if test="startDate!= null" >
+                AND o.create_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null" >
+                AND o.create_time &lt;= #{endDate}
+            </if>
+            <if test="payStatus == 10" >
+                AND o.pay_status = #{payStatus}
+            </if>
+            <if test="payStatus == 20" >
+                AND o.pay_status = #{payStatus}
+            </if>
+        </where>
+    </select>
+</mapper>
