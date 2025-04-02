@@ -10,8 +10,6 @@
  **安装教程、开发文档、操作手册请进入官网查询** 
 
  **官网地址：** [https://www.jjjshop.net](https://www.jjjshop.net) 
-    
- **【PHP版本】** [https://gitee.com/victor123/jjjfood](https://gitee.com/victor123/jjjfood)
 
  **如果对您有帮助，您可以点右上角 "Star" 支持一下，这样我们才有继续免费下去的动力，谢谢！
 QQ交流群 (入群前，请在网页右上角点 "Star" )** 
