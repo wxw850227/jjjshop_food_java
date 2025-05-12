@@ -1,10 +1,4 @@
 <template>
-  <!--
-    	作者：wangxw
-    	时间：2019-11-05
-    	描述：diy组件 富文本框
-    -->
-
     <div @click.stop="$parent.$parent.onEditer(index)">
       <div class="drag optional" :class="{selected: index === selectedIndex}">
         <div class="diy-richText" :style="{background: item.style.background, padding: item.style.paddingTop + 'px ' + item.style.paddingLeft + 'px'}"
